@@ -1,0 +1,3 @@
+手写spring框架
+1.先实现ioc 自动装配bean
+一个容器 加载所有注解的bean到上下文里,可以通过getBean来获取bean
