@@ -8,8 +8,14 @@ import com.lmax.disruptor.EventHandler;
  * @desc:
  **/
 public class LongEventHandler implements EventHandler<LongEvent> {
+    private String prefix  = "";
     @Override
     public void onEvent(LongEvent event, long sequence, boolean endOfBatch) throws Exception {
-        System.out.println("消费:" + event.getNum() + "-"+sequence+"--"+endOfBatch);
+        System.out.println("消费:"+prefix+"  " + event.getNum() + "-"+sequence+"--"+endOfBatch);
+        Thread.sleep(500);
+    }
+
+    public LongEventHandler(String prefix) {
+        this.prefix = prefix;
     }
 }
