@@ -12,7 +12,7 @@ public class LongEventHandler implements EventHandler<LongEvent> {
     @Override
     public void onEvent(LongEvent event, long sequence, boolean endOfBatch) throws Exception {
         System.out.println("消费:"+prefix+"  " + event.getNum() + "-"+sequence+"--"+endOfBatch);
-        Thread.sleep(500);
+        Thread.sleep(2000);
     }
 
     public LongEventHandler(String prefix) {

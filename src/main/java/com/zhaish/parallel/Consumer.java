@@ -35,10 +35,16 @@ public class Consumer {
 
         EventHandler<LongEvent> eventHandler = new LongEventHandler("A");
         EventHandler<LongEvent> eventHandler1 = new LongEventHandler("B");
-
         disruptor.handleEventsWith(eventHandler,eventHandler1);
+
+        WorkHandler<LongEvent>[] workHandlers = new LongEventWorkHandler[2];
+        workHandlers[0] = new LongEventWorkHandler("A");
+        workHandlers[1] = new LongEventWorkHandler("B");
+        //disruptor.handleEventsWithWorkerPool(workHandlers);
         // 问题1: handler 菱形执行怎么写?  可以整合guava包里的future with then来处理
         // 问题2: 生产生产的速度超过了消费者的速度,会覆盖没消费掉的数据么?  不会
+        // 问题3: 生产消费的running标识符怎么处理比较好
+        // handleEventsWithWorkerPool 可以不重复消费
         disruptor.start();
         long begin = System.currentTimeMillis();
         LongEventProducer producer = new LongEventProducer(disruptor.getRingBuffer());
@@ -47,7 +53,7 @@ public class Consumer {
             producer.onData(index++);
         }
         System.out.println(System.currentTimeMillis() - begin);
-        disruptor.shutdown(20, TimeUnit.SECONDS);
+        disruptor.shutdown(2000, TimeUnit.SECONDS);
         //生产完之后关闭,如果消费者还没消费完全,会抛出com.lmax.disruptor.TimeoutException,然后不会关闭掉disruptor
         System.out.println(System.currentTimeMillis() - begin);
     }
